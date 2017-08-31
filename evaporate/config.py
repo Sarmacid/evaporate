@@ -45,8 +45,8 @@ def get_path(path_type=None, add=None):
 
 
 def get_db_path():
-    path = get_path(None, get_option('DB_FILENAME'))
-    return path
+    db_path = os.path.join(EVAPORATE_DIR, get_option('DB_FILENAME'))
+    return db_path
 
 
 def check_config_file():
@@ -58,8 +58,8 @@ def check_config_file():
         exit()
 
 
-CONFIG_FILE = os.path.abspath(os.path.join(os.getenv("HOME"),
-                                           '.evaporate/config.cfg'))
+EVAPORATE_DIR = os.path.abspath(os.path.join(os.getenv("HOME"), '.evaporate/'))
+CONFIG_FILE = os.path.join(EVAPORATE_DIR, 'config.cfg')
 check_config_file()
 config = ConfigParser.ConfigParser()
 config.read(CONFIG_FILE)
