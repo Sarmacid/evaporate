@@ -82,8 +82,6 @@ def process_playlist(playlist):
     published_videos = playlist_yt__info['entries']
     downloaded_videos = db.get_downloaded_videos(1, playlist['id'])
     for episode_number in range(len(published_videos)):
-    #for video in published_videos:
-        #yid = video['id']
         yid = published_videos[episode_number]['id']
         if yid not in downloaded_videos:
             download_video(yid, playlist, episode_number + 1)

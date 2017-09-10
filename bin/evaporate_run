@@ -26,13 +26,10 @@ def main():
             question = '\nAre you sure you want to delete the "' + playlist['title'] + '" playlist?'
             if confirm(question):
                 pass
-                #db.remove_playlist(args.remove[0])
+                db.remove_playlist(args.remove[0])
         else:
             print "Could not find playlist with ID '" + str(playlist_id) + "'."
     else:
-        #yt.add_playlist('https://www.youtube.com/playlist?list=PLlUk42GiU2guNzWBzxn7hs8MaV7ELLCP_')
-        #yt.add_playlist('https://www.youtube.com/playlist?list=PLt8z5gfL3E0WCaBCdxmFk15M1Ni5gpZPb')
-        #https://www.youtube.com/watch?v=DsuxXH8Q76o&list=PLTzMGnJjrsSzTTcwLXFHVdi5K1_aXg4kP
         yt.get_missing_episodes()
         e_xml.process_playlists()
 
