@@ -1,3 +1,4 @@
 config.cfg
 *.pyc
 *.db
+bin/evaporate
