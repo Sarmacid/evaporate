@@ -1,0 +1,78 @@
+#!/usr/bin/env python
+
+import sys
+import argparse
+
+from evaporate import yt, db, e_xml, config
+
+
+def main():
+    args = usage()
+    db.create_db()
+
+    if args.add:
+        yt.add_playlist(args.add[0])
+    elif args.list:
+        playlists = db.get_all_playlists()
+        print ''
+        for playlist in playlists:
+            line = str(playlist['id']) + '. ' + playlist['title'] + ':\t' + config.get_option('PLAYLIST_BASE_URL') + playlist['yid']
+            print line
+        print ''
+    elif args.remove:
+        playlist_id = args.remove[0]
+        playlist = db.get_playlist(playlist_id)
+        if playlist:
+            question = '\nAre you sure you want to delete the "' + playlist['title'] + '" playlist?'
+            if confirm(question):
+                pass
+                #db.remove_playlist(args.remove[0])
+        else:
+            print "Could not find playlist with ID '" + str(playlist_id) + "'."
+    else:
+        #yt.add_playlist('https://www.youtube.com/playlist?list=PLlUk42GiU2guNzWBzxn7hs8MaV7ELLCP_')
+        #yt.add_playlist('https://www.youtube.com/playlist?list=PLt8z5gfL3E0WCaBCdxmFk15M1Ni5gpZPb')
+        #https://www.youtube.com/watch?v=DsuxXH8Q76o&list=PLTzMGnJjrsSzTTcwLXFHVdi5K1_aXg4kP
+        yt.get_missing_episodes()
+        e_xml.process_playlists()
+
+
+def confirm(question, default='no'):
+    """
+    Ask a yes/no question via raw_input() and return the answer.
+    """
+
+    valid = {"yes": True, "y": True, "no": False, "n": False}
+
+    if default is None:
+        prompt = " [y/n] "
+    elif default == "yes":
+        prompt = " [Y/n] "
+    elif default == "no":
+        prompt = " [y/N] "
+    else:
+        raise ValueError("invalid default answer: '%s'" % default)
+
+    while True:
+        sys.stdout.write(question + prompt)
+        choice = raw_input().lower()
+        if default is not None and choice == '':
+            return valid[default]
+        elif choice in valid:
+            return valid[choice]
+        else:
+            sys.stdout.write("Please respond with 'yes' or 'no' "
+                             "(or 'y' or 'n').\n")
+
+
+def usage():
+    parser = argparse.ArgumentParser(description='Converts Youtube playlists into podcasts.')
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument('-a', '--add', metavar='URL', type=str, nargs=1, help='URL of the playlist to add.')
+    group.add_argument('-l', '--list', action='store_true', help='List playlists in use.')
+    group.add_argument('-r', '--remove', metavar='#', type=int, nargs=1, help='Number of the playlist to remove (Files must be removed manually).')
+    return parser.parse_args()
+
+
+if __name__ == "__main__":
+    main()
