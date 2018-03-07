@@ -1,4 +1,4 @@
 config.cfg
 *.pyc
 *.db
-bin/evaporate
+bin/loretrack

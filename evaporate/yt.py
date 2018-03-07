@@ -50,7 +50,10 @@ def download_video(yid, playlist, episode_number):
     while info_dict['upload_date'] is None:
         print 'Trying to grab information for video...'
         with youtube_dl.YoutubeDL(options) as ydl:
-            info_dict = ydl.extract_info(yid, download=False)
+            try:
+                info_dict = ydl.extract_info(yid, download=False)
+            except youtube_dl.utils.DownloadError:
+                return False
         sleep(1)
 
     info['playlist_id'] = playlist['id']

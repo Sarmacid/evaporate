@@ -14,5 +14,5 @@ setup(name='evaporate',
           'PyRSS2Gen',
           'youtube_dl',
       ],
-      scripts=['bin/evaporate'],
+      scripts=['bin/evaporate_run'],
       zip_safe=False)
